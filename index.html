@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Your Vocabulary: Word Association</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .serif { font-family: 'Playfair Display', serif; }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .reveal-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .reveal-btn.revealed {
+            background-color: transparent !important;
+            border-color: transparent !important;
+            cursor: default;
+        }
+
+        /* Toast Notification */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #334155;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px;
+            position: fixed;
+            z-index: 50;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s, visibility 0.3s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            font-weight: 600;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <!-- Hero Header -->
+    <header class="w-full bg-slate-900 text-white pt-20 pb-16 px-6 relative overflow-hidden">
+        <!-- Abstract Web Background -->
+        <div class="absolute inset-0 opacity-20 pointer-events-none">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="0.5"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
+        </div>
+
+        <div class="max-w-4xl mx-auto relative z-10 text-center">
+            <div class="inline-block px-4 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/20 text-indigo-300 text-xs font-bold tracking-[0.2em] uppercase mb-6">
+                <i class="fa-solid fa-brain mr-2"></i> Study Smarter
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold serif mb-6 leading-tight">
+                Master Your Vocabulary:<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-emerald-400 italic">The Word Association Method</span>
+            </h1>
+            <p class="text-slate-300 text-lg md:text-xl leading-relaxed max-w-3xl mx-auto mb-8">
+                Have you ever stared at a list of vocabulary words, memorized the dictionary definitions, and then completely forgotten them during the exam? <strong class="text-white">You aren't alone!</strong>
+            </p>
+            <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700 text-left max-w-3xl mx-auto shadow-inner">
+                <p class="text-slate-300">
+                    Rote memorization (just repeating a definition over and over) doesn't work very well because your brain doesn't have anything to attach the new word to. To truly learn a word, you need to build a <strong class="text-indigo-400">"web of meaning"</strong> in your brain. Instead of learning a word in isolation, you link it to feelings, scenarios, categories, and other words you already know.
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="flex-grow w-full max-w-6xl mx-auto px-4 md:px-8 py-16">
+        
+        <div class="text-center mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-slate-800 uppercase tracking-widest">The 4 Association Strategies</h2>
+            <div class="w-24 h-1 bg-indigo-500 mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <!-- Strategy 1: Triggers -->
+            <div class="glass-card rounded-3xl p-8 border-t-4 border-t-amber-500 flex flex-col h-full">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl flex-shrink-0 shadow-sm border border-amber-200">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-800 serif mb-1">1. "Trigger" Associations</h3>
+                        <p class="text-amber-600 font-bold uppercase tracking-widest text-xs">The Concept Web</p>
+                    </div>
+                </div>
+                <p class="text-slate-600 mb-6 flex-grow">Instead of writing down a boring dictionary definition, write down the thoughts, feelings, or images that <em>trigger</em> the word in your mind. Think of 3-4 simple words or a quick scenario that paint a picture of the target word.</p>
+                
+                <div class="bg-amber-50 rounded-xl p-5 border border-amber-100 mb-4">
+                    <p class="font-bold text-slate-800 text-sm mb-3 uppercase tracking-wider"><i class="fa-solid fa-gamepad mr-2 text-amber-500"></i> Interactive Example</p>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3 rounded shadow-sm">
+                            <span class="text-slate-600 italic">"Safe, protected, locked doors, alarm system"</span>
+                            <button onclick="reveal(this, 'Security')" class="reveal-btn bg-amber-500 hover:bg-amber-600 text-white font-bold py-1.5 px-4 rounded text-xs tracking-widest uppercase shadow-md flex-shrink-0">Reveal Word</button>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3 rounded shadow-sm">
+                            <span class="text-slate-600 italic">"Keeping everything, never throwing away, boxes of junk"</span>
+                            <button onclick="reveal(this, 'Hoard')" class="reveal-btn bg-amber-500 hover:bg-amber-600 text-white font-bold py-1.5 px-4 rounded text-xs tracking-widest uppercase shadow-md flex-shrink-0">Reveal Word</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-indigo-950/90 rounded-xl p-4 border border-indigo-500/30 mb-6 relative group shadow-inner">
+                    <p class="text-indigo-400 font-bold text-[10px] uppercase tracking-widest mb-2 flex items-center gap-1.5"><i class="fa-solid fa-robot"></i> Ask AI to help you</p>
+                    <p class="text-indigo-100 text-sm font-mono leading-relaxed pr-6" id="prompt-1">"Give me 3-4 simple trigger words, feelings, or a quick scenario for the English word [WORD]. Do not use the word itself in your answer!"</p>
+                    <button onclick="copyPrompt('prompt-1')" class="absolute top-3 right-3 text-indigo-400 hover:text-white transition-colors p-1" title="Copy Prompt"><i class="fa-regular fa-copy text-lg"></i></button>
+                </div>
+
+                <div class="bg-slate-800 text-white p-4 rounded-xl mt-auto">
+                    <p class="text-amber-400 font-bold text-xs uppercase tracking-widest mb-1"><i class="fa-solid fa-lightbulb mr-1"></i> Study Tip</p>
+                    <p class="text-sm text-slate-300">Make flashcards where the front just has a list of trigger words, and you have to guess the target word on the back.</p>
+                </div>
+            </div>
+
+            <!-- Strategy 2: Word Partners -->
+            <div class="glass-card rounded-3xl p-8 border-t-4 border-t-emerald-500 flex flex-col h-full">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl flex-shrink-0 shadow-sm border border-emerald-200">
+                        <i class="fa-solid fa-handshake"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-800 serif mb-1">2. Word Partners</h3>
+                        <p class="text-emerald-600 font-bold uppercase tracking-widest text-xs">Collocations</p>
+                    </div>
+                </div>
+                <p class="text-slate-600 mb-6 flex-grow">In English, certain words love to "hold hands" with other specific words. If you only learn a word by itself, it will sound unnatural when you try to write a sentence. Always learn new nouns with their favorite adjectives.</p>
+                
+                <div class="bg-emerald-50 rounded-xl p-5 border border-emerald-100 mb-4">
+                    <p class="font-bold text-slate-800 text-sm mb-3 uppercase tracking-wider"><i class="fa-solid fa-eye mr-2 text-emerald-500"></i> See it in action</p>
+                    <div class="space-y-3 text-sm">
+                        <p class="bg-white p-3 rounded shadow-sm text-slate-700">Don't just learn <strong>shelter</strong>. Learn the phrase: <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-semibold">A temporary shelter</span>.</p>
+                        <p class="bg-white p-3 rounded shadow-sm text-slate-700">Don't just learn <strong>belonging</strong>. Learn the phrase: <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-semibold">A strong sense of belonging</span>.</p>
+                    </div>
+                </div>
+
+                <div class="bg-indigo-950/90 rounded-xl p-4 border border-indigo-500/30 mb-6 relative group shadow-inner">
+                    <p class="text-indigo-400 font-bold text-[10px] uppercase tracking-widest mb-2 flex items-center gap-1.5"><i class="fa-solid fa-robot"></i> Ask AI to help you</p>
+                    <p class="text-indigo-100 text-sm font-mono leading-relaxed pr-6" id="prompt-2">"What are the 3 most common word partners (collocations) for the English word [WORD]? Show me how to use them in a short sentence."</p>
+                    <button onclick="copyPrompt('prompt-2')" class="absolute top-3 right-3 text-indigo-400 hover:text-white transition-colors p-1" title="Copy Prompt"><i class="fa-regular fa-copy text-lg"></i></button>
+                </div>
+
+                <div class="bg-slate-800 text-white p-4 rounded-xl mt-auto">
+                    <p class="text-emerald-400 font-bold text-xs uppercase tracking-widest mb-1"><i class="fa-solid fa-highlighter mr-1"></i> Study Tip</p>
+                    <p class="text-sm text-slate-300">When reading a text, use a highlighter to mark these "word partners" together so your brain remembers them as one unit.</p>
+                </div>
+            </div>
+
+            <!-- Strategy 3: The Odd One Out -->
+            <div class="glass-card rounded-3xl p-8 border-t-4 border-t-rose-500 flex flex-col h-full">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-2xl flex-shrink-0 shadow-sm border border-rose-200">
+                        <i class="fa-solid fa-shapes"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-800 serif mb-1">3. The Odd One Out</h3>
+                        <p class="text-rose-600 font-bold uppercase tracking-widest text-xs">Finding the Boundaries</p>
+                    </div>
+                </div>
+                <p class="text-slate-600 mb-6 flex-grow">Sometimes, the best way to understand exactly what a word means is to figure out what it <em>doesn't</em> mean. Group similar words together, then add one word that has a slightly different feeling or category.</p>
+                
+                <div class="bg-rose-50 rounded-xl p-5 border border-rose-100 mb-4">
+                    <p class="font-bold text-slate-800 text-sm mb-3 uppercase tracking-wider"><i class="fa-solid fa-puzzle-piece mr-2 text-rose-500"></i> Solve the Puzzle</p>
+                    <div class="bg-white p-4 rounded shadow-sm text-center mb-3">
+                        <p class="font-bold text-slate-700 tracking-wide">COZY &nbsp;|&nbsp; WELCOMING &nbsp;|&nbsp; CONVENIENT &nbsp;|&nbsp; WARM</p>
+                    </div>
+                    <div class="text-center">
+                        <button onclick="revealExplanation('odd-explanation', this)" class="bg-rose-500 hover:bg-rose-600 text-white font-bold py-2 px-6 rounded-full text-xs tracking-widest uppercase shadow-md transition-colors">Find the Odd One Out</button>
+                    </div>
+                    <div id="odd-explanation" class="hidden mt-4 text-sm text-slate-700 bg-white p-4 rounded border-l-4 border-rose-500">
+                        <p><strong>Convenient.</strong> Why? Because cozy, welcoming, and warm are all <em>emotional</em> feelings of comfort. "Convenient" is purely <em>practical</em> (like an apartment being close to a train station).</p>
+                    </div>
+                </div>
+
+                <div class="bg-indigo-950/90 rounded-xl p-4 border border-indigo-500/30 mb-6 relative group shadow-inner">
+                    <p class="text-indigo-400 font-bold text-[10px] uppercase tracking-widest mb-2 flex items-center gap-1.5"><i class="fa-solid fa-robot"></i> Ask AI to help you</p>
+                    <p class="text-indigo-100 text-sm font-mono leading-relaxed pr-6" id="prompt-3">"Create a challenging 'Odd One Out' puzzle for the word [WORD]. Give me 3 synonyms and 1 slightly different word. Then explain the answer!"</p>
+                    <button onclick="copyPrompt('prompt-3')" class="absolute top-3 right-3 text-indigo-400 hover:text-white transition-colors p-1" title="Copy Prompt"><i class="fa-regular fa-copy text-lg"></i></button>
+                </div>
+
+                <div class="bg-slate-800 text-white p-4 rounded-xl mt-auto">
+                    <p class="text-rose-400 font-bold text-xs uppercase tracking-widest mb-1"><i class="fa-solid fa-user-group mr-1"></i> Study Tip</p>
+                    <p class="text-sm text-slate-300">Create your own "Odd One Out" puzzles and challenge a friend. You have to really understand the definitions to explain why a word doesn't fit!</p>
+                </div>
+            </div>
+
+            <!-- Strategy 4: Mind Mapping -->
+            <div class="glass-card rounded-3xl p-8 border-t-4 border-t-sky-500 flex flex-col h-full">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="w-14 h-14 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-2xl flex-shrink-0 shadow-sm border border-sky-200">
+                        <i class="fa-solid fa-sitemap"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-800 serif mb-1">4. Mind Mapping</h3>
+                        <p class="text-sky-600 font-bold uppercase tracking-widest text-xs">Categorization</p>
+                    </div>
+                </div>
+                <p class="text-slate-600 mb-6 flex-grow">Your brain loves filing cabinets. If you try to remember 20 random words, you will struggle. But if you remember 3 categories that hold a few words each, it becomes easy.</p>
+                
+                <div class="bg-sky-50 rounded-xl p-5 border border-sky-100 mb-4">
+                    <p class="font-bold text-slate-800 text-sm mb-3 uppercase tracking-wider"><i class="fa-solid fa-folder-tree mr-2 text-sky-500"></i> Category View</p>
+                    <ul class="space-y-3 text-sm">
+                        <li class="bg-white p-3 rounded shadow-sm border-l-4 border-sky-400">
+                            <span class="font-bold text-slate-800 block mb-1">Emotions of Home</span>
+                            <span class="text-slate-600">cozy, belonging, peaceful.</span>
+                        </li>
+                        <li class="bg-white p-3 rounded shadow-sm border-l-4 border-sky-500">
+                            <span class="font-bold text-slate-800 block mb-1">Organizing & Clutter</span>
+                            <span class="text-slate-600">clear out, give away, hoard, sort.</span>
+                        </li>
+                        <li class="bg-white p-3 rounded shadow-sm border-l-4 border-sky-600">
+                            <span class="font-bold text-slate-800 block mb-1">Poetry & Literature</span>
+                            <span class="text-slate-600">narrative, lyrical, tone, theme.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-indigo-950/90 rounded-xl p-4 border border-indigo-500/30 mb-6 relative group shadow-inner">
+                    <p class="text-indigo-400 font-bold text-[10px] uppercase tracking-widest mb-2 flex items-center gap-1.5"><i class="fa-solid fa-robot"></i> Ask AI to help you</p>
+                    <p class="text-indigo-100 text-sm font-mono leading-relaxed pr-6" id="prompt-4">"I am trying to learn the word [WORD]. Can you give me 3 broad categories or themes it belongs to, and list a few related words for each category?"</p>
+                    <button onclick="copyPrompt('prompt-4')" class="absolute top-3 right-3 text-indigo-400 hover:text-white transition-colors p-1" title="Copy Prompt"><i class="fa-regular fa-copy text-lg"></i></button>
+                </div>
+
+                <div class="bg-slate-800 text-white p-4 rounded-xl mt-auto">
+                    <p class="text-sky-400 font-bold text-xs uppercase tracking-widest mb-1"><i class="fa-solid fa-pen-to-square mr-1"></i> Study Tip</p>
+                    <p class="text-sm text-slate-300">Before a test, don't try to remember a giant list. Just remember your 3 or 4 main "categories" and let your brain unpack them.</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Conclusion -->
+    <section class="w-full bg-indigo-900 text-white py-16 px-6 text-center border-t-8 border-indigo-500">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-3xl font-bold serif mb-6">Your Next Steps</h2>
+            <p class="text-indigo-200 text-lg leading-relaxed mb-8">
+                Next time you get a new vocabulary list, don't just reach for a dictionary. Ask yourself: <em>What is this word's category? What are its favorite word partners? What images trigger it in my mind?</em> 
+            </p>
+            <p class="text-2xl font-bold text-emerald-400 uppercase tracking-widest">
+                Build the web, and the words will stick forever!
+            </p>
+        </div>
+    </section>
+
+    <!-- Persistent Signature -->
+    <div class="bg-slate-950 py-4 text-center border-t border-slate-800">
+        <p class="text-slate-600 text-xs font-bold tracking-[0.2em] uppercase">
+            <i class="fa-solid fa-code text-indigo-500 mr-1"></i> Developed for Unit 6 Vocabulary
+        </p>
+    </div>
+
+    <div id="toast"><i class="fa-solid fa-circle-check text-emerald-400"></i> AI Prompt copied to clipboard!</div>
+
+    <!-- Interactivity Script -->
+    <script>
+        function reveal(btnElement, answer) {
+            btnElement.classList.add('revealed');
+            btnElement.innerHTML = `<span class="text-amber-600 font-bold text-base font-serif capitalize">${answer}</span>`;
+            // Add a little pop animation
+            btnElement.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                btnElement.style.transform = 'scale(1)';
+            }, 200);
+        }
+
+        function revealExplanation(elementId, btnElement) {
+            const explanation = document.getElementById(elementId);
+            explanation.classList.remove('hidden');
+            // Hide the button after clicking
+            btnElement.style.display = 'none';
+        }
+
+        // Copy to clipboard function
+        function copyPrompt(elementId) {
+            const textToCopy = document.getElementById(elementId).innerText;
+            
+            // Create a temporary textarea to copy the text
+            const tempTextArea = document.createElement("textarea");
+            tempTextArea.value = textToCopy;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast();
+            } catch (err) {
+                console.error('Failed to copy text', err);
+            }
+            
+            document.body.removeChild(tempTextArea);
+        }
+
+        // Toast notification logic
+        function showToast() {
+            const toast = document.getElementById("toast");
+            toast.className = "show";
+            setTimeout(function(){ 
+                toast.className = toast.className.replace("show", ""); 
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
